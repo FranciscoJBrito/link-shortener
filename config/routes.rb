@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  '/links' => 'links#create'
+  post '/links' => 'links#create'
 end
