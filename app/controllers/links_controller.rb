@@ -1,25 +1,21 @@
 class LinksController < ApplicationController
 
+      def show
+            @link = Link.find_by_lookup_code(params[:lookup_code])
+
+      end
+
       def create
             shortener = Shortener.new(link_params[:original_url])
             @link = shortener.generate_short_link
 
-            respond_to do |format|
-                  if @link.persisted?
-                    format.js { render 'create.js.erb' }
-                  else
-                    format.js { render 'error.js', status: :unprocessable_entity }
+            if @link.persisted?
+                  respond_to do |format|
+                    format.html { redirect_to link_path(@link.lookup_code) }
                   end
+            else
+                  render 'home/index'
             end
-
-            #if @link.persisted?
-            #      respond_to do |format|
-            #           format.js
-            #            format.html { redirect_to root_path }
-            #      end
-            #else
-            #      render 'home/index'
-            #end
 
       end
 
