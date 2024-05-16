@@ -1,29 +1,30 @@
-version: '3'
 services:
-  database:
+  postgres:
+    container_name: links_shortener_db
     restart: on-failure:3
     image: postgres:13.2
     volumes:
-      - link_s_postgres_db:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   link_s_app:
+    container_name: links_shortener_app
     restart: on-failure:3
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     ports:
       - 3000:3000
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     env_file:
       - .env
     volumes:
       - .:/usr/src/app
     depends_on:
-      - database
+      - postgres
 volumes:
-  link_s_postgres_db:
+  postgres:

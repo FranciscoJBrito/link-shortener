@@ -1,13 +1,15 @@
-FROM ruby:3.0-bullseye
+FROM ruby:3.0.6-bullseye
+
+# Obteniendo el source de nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 # Instalando dependencias
 RUN apt-get update -qq && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    nodejs \
-    yarn \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
+  build-essential \
+  libpq-dev \
+  nodejs \
+  vim \
+  && rm -rf /var/lib/apt/lists/*
 
 # Agregando usuario developer
 RUN useradd -m -s /bin/bash developer
@@ -31,6 +33,11 @@ RUN chmod -R 755 /usr/src/app
 
 # Cambiando a directorio de trabajo
 WORKDIR /usr/src/app
+
+# Copiando package.json & yarn.lock
+COPY package.json yarn.lock ./
+RUN npm install -g yarn
+RUN yarn --pure-lockfile
 
 # Copiando archivos necesarios
 COPY Gemfile ./

@@ -1,5 +1,5 @@
 {
-  "name": "link-shortener-two",
+  "name": "link-shortener",
   "private": true,
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
@@ -13,5 +13,8 @@
   "version": "0.1.0",
   "devDependencies": {
     "webpack-dev-server": "^3"
+  },
+  "engines": {
+    "node": ">=v10.24.1"
   }
 }
